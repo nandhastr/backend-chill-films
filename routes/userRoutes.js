@@ -1,5 +1,5 @@
 import express from "express";
-import { getUsers, getUser, createUser, updateUser, deleteUser } from "../services/userService.js";
+import { getUsers, getUser, createUser, updateUser, deleteUser } from "../services/userController.js";
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.get("/users", async (req, res) => {
         res.status(200).send(user);
     } catch (error) {
         console.error("Gagal mendapatkan data data:", error.message);
-        res.status(500).send({ error: "Gagal mendapatkan data data" });
+        res.status(500).send({ error: "Gagal mendapatkan data " });
     }
 });
 
@@ -25,25 +25,23 @@ router.get("/user/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(user);
+        res.status(200).send({data: user});
     } catch (error) {
-        console.error("Gagal mendapatkan data:", error.message);
-        res.status(500).send({ error: "Gagal mendapatkan data" });
+       console.error("Undefined:", error.message);
+       res.status(500).send({ error: "undefined" });
     }
 });
 
-// Endpoint untuk menambahkan user baru
+// Endpoint untuk menambahkan data baru
 router.post("/user", async (req, res) => {
     try {
-        const { username, email, password, gambar } = req.body;
-console.log(req.body);
+        const { fullname, username, email, password, gambar, token } = req.body;
+// console.log(req.body);
 
-         if (!username || !email || !password || !gambar) {
-             return res.status(400).send({ error: "Semua field harus diisi" });
-         }
-        const user = await createUser({ username, email, password, gambar });
+        const user = await createUser({ fullname, username, email, password, gambar, token });
 
-        res.status(201).send(user);
+        console.log("Data berhasil ditambahkan");
+        res.status(201).send({msg: "Data berhasil ditambahkan"});
     } catch (error) {
         console.error("Gagal membuat data:", error.message);
         res.status(500).send({ error: "Gagal membuat data" });
@@ -53,17 +51,23 @@ console.log(req.body);
 // enpoint untuk update
 router.put("/user/:id", async (req, res) => {
     try {
-        const id = req.params.id;
-        const { username, email, password, gambar } = req.body;
+        const id = req.params.id; 
+        const { fullname, username, email, password, gambar, token } = req.body;
 
+       
+        const updatedUser = await updateUser(id, {
+            fullname,
+            username,
+            email,
+            password,
+            gambar,
+            token,
+        });
 
-        const updateduser = await updateUser(id, { username, email, password, gambar });
-
-        if (!updateduser) {
+        if (!updatedUser) {
             return res.status(404).send({ error: "undefined" });
         }
-
-        res.status(200).send(updateduser);
+        res.status(200).send({msg: "Update data berhasil"}); 
     } catch (error) {
         console.error("Gagal memperbarui data:", error.message);
         res.status(500).send({ error: "Gagal memperbarui data" });
@@ -72,7 +76,9 @@ router.put("/user/:id", async (req, res) => {
 
 
 
-// Endpoint untuk menghapus film
+
+
+// Endpoint untuk menghapus 
 router.delete("/user/:id", async (req, res) => {
     try {
         const id = req.params.id;
@@ -82,10 +88,10 @@ router.delete("/user/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(result);
+        res.status(200).send({msg: "Data berhasil dihapus"});
     } catch (error) {
         console.error("Gagal menghapus data:", error.message);
-        res.status(500).send({ error: "Gagal menghapus data" });
+        res.status(404).send({ error: error.message });
     }
 });
 

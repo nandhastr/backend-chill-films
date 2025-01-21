@@ -1,5 +1,5 @@
 import express from "express";
-import { getGenres, getGenre, createGenre, updateGenre, deleteGenre } from "../services/genreService.js";
+import { getGenres, getGenre, createGenre, updateGenre, deleteGenre } from "../services/genreController.js";
 
 const router = express.Router();
 
@@ -24,10 +24,10 @@ router.get("/genre/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(genre);
+        res.status(200).send({ data: genre});
     } catch (error) {
-        console.error("Gagal mendapatkan data:", error.message);
-        res.status(500).send({ error: "Gagal mendapatkan data" });
+        console.error("Undefined:", error.message);
+        res.status(500).send({ error: "undefined" });
     }
 });
 
@@ -35,10 +35,10 @@ router.get("/genre/:id", async (req, res) => {
 router.post("/genre", async (req, res) => {
     try {
         const { nama_genre } = req.body;
-
+        
         const genre = await createGenre({ nama_genre });
 
-        res.status(201).send(genre);
+        res.status(201).send({msg: "Data berhasil ditambahkan"});
     } catch (error) {
         console.error("Gagal membuat data:", error.message);
         res.status(500).send({ error: "Gagal membuat data" });
@@ -51,7 +51,6 @@ router.put("/genre/:id", async (req, res) => {
         const id = req.params.id;
         const { nama_genre } = req.body;
 
-        // console.log("Data yang diterima:", { id, nama_genre }); 
 
         if (!nama_genre) {
             return res.status(400).send({ error: "nama genre tidak boleh kosong" });
@@ -63,7 +62,7 @@ router.put("/genre/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(updatedGenre);
+        res.status(200).send({msg: "Data berhasil diperbarui"});
     } catch (error) {
         console.error("Gagal memperbarui data:", error.message);
         res.status(500).send({ error: "Gagal memperbarui data" });
@@ -82,10 +81,10 @@ router.delete("/genre/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(result);
+        res.status(200).send({msg: "Data berhasil dihapus"});
     } catch (error) {
         console.error("Gagal menghapus data:", error.message);
-        res.status(500).send({ error: "Gagal menghapus data" });
+         res.status(404).send({ error: error.message });
     }
 });
 

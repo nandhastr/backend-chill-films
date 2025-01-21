@@ -1,5 +1,5 @@
 import express from "express";
-import { getPakets, getPaket, createPaket, updatePaket, deletePaket } from "../services/paketService.js";
+import { getPakets, getPaket, createPaket, updatePaket, deletePaket } from "../services/paketController.js";
 
 const router = express.Router();
 
@@ -27,8 +27,8 @@ router.get("/paket/:id", async (req, res) => {
 
         res.status(200).send(paket);
     } catch (error) {
-        console.error("Gagal mendapatkan data:", error.message);
-        res.status(500).send({ error: "Gagal mendapatkan data" });
+       console.error("Undefined:", error.message);
+       res.status(500).send({ error: "undefined" });
     }
 });
 
@@ -38,12 +38,10 @@ router.post("/paket", async (req, res) => {
         const { nama, harga, benefit, deskripsi } = req.body;
 console.log(req.body);
 
-         if (!nama || !harga || !benefit || !deskripsi) {
-             return res.status(400).send({ error: "Semua field harus diisi" });
-         }
+        
         const paket = await createPaket({ nama, harga, benefit, deskripsi });
 
-        res.status(201).send(paket);
+        res.status(201).send({msg: "Data berhasil ditambahkan"});
     } catch (error) {
         console.error("Gagal membuat data:", error.message);
         res.status(500).send({ error: "Gagal membuat data" });
@@ -63,7 +61,7 @@ router.put("/paket/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(updatedpaket);
+        res.status(200).send({msg: "Data berhasil diperbarui"});
     } catch (error) {
         console.error("Gagal memperbarui data:", error.message);
         res.status(500).send({ error: "Gagal memperbarui data" });
@@ -82,10 +80,9 @@ router.delete("/paket/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(result);
+        res.status(200).send({msg: "Data berhasil dihapus"});
     } catch (error) {
-        console.error("Gagal menghapus data:", error.message);
-        res.status(500).send({ error: "Gagal menghapus data" });
+        console.error("Gagal menghapus data:", error.message);res.status(404).send({ error: error.message });
     }
 });
 

@@ -1,4 +1,5 @@
-MYSQL_HOST = 'localhost'
-MYSQL_USER='root'
-MYSQL_PASSWORD =''
-MYSQL_DATABASE='db_movie_chill'
+DB_NAME=db_movie_chill
+DB_USER=root
+DB_PASSWORD=
+DB_HOST=localhost
+DB_DIALECT=mysql

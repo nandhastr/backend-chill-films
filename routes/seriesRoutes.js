@@ -1,5 +1,5 @@
 import express from "express";
-import { getSerieses, getSeries, createSeries, updateSeries, deleteSeries } from "../services/seriesService.js";
+import { getSerieses, getSeries, createSeries, updateSeries, deleteSeries } from "../services/seriesController.js";
 
 const router = express.Router();
 
@@ -26,8 +26,8 @@ router.get("/series/:id", async (req, res) => {
 
         res.status(200).send(series);
     } catch (error) {
-        console.error("Gagal mendapatkan data:", error.message);
-        res.status(500).send({ error: "Gagal mendapatkan data" });
+        console.error("Undefined:", error.message);
+        res.status(500).send({ error: "undefined" });
     }
 });
 
@@ -101,7 +101,7 @@ router.delete("/series/:id", async (req, res) => {
         res.status(200).send(result);
     } catch (error) {
         console.error("Gagal menghapus data:", error.message);
-        res.status(500).send({ error: "Gagal menghapus data" });
+         res.status(404).send({ error: error.message });
     }
 });
 

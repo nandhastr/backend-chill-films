@@ -1,5 +1,5 @@
 import express from "express";
-import { getMovies, getMovie, createMovie, updateMovie, deleteMovie } from "../services/movieService.js";
+import { getMovies, getMovie, createMovie, updateMovie, deleteMovie } from "../services/movieController.js";
 
 const router = express.Router();
 
@@ -26,8 +26,8 @@ router.get("/movie/:id", async (req, res) => {
 
         res.status(200).send(movie);
     } catch (error) {
-        console.error("Gagal mendapatkan data:", error.message);
-        res.status(500).send({ error: "Gagal mendapatkan data" });
+       console.error("Undefined:", error.message);
+       res.status(500).send({ error: "undefined" });
     }
 });
 
@@ -51,7 +51,7 @@ router.post("/movie", async (req, res) => {
             produser,
         });
 
-        res.status(201).send(movie);
+        res.status(201).send({msg: "Data berhasil ditambahkan"});
     } catch (error) {
         console.error("Gagal membuat data:", error.message);
         res.status(500).send({ error: "Gagal membuat data" });
@@ -83,7 +83,7 @@ router.put("/movie/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(updatedMovie);
+        res.status(200).send({msg: "Data berhasil diperbarui"});
     } catch (error) {
         console.error("Gagal memperbarui data:", error.message);
         res.status(500).send({ error: "Gagal memperbarui data" });
@@ -100,10 +100,10 @@ router.delete("/movie/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(result);
+        res.status(200).send({msg: "Data berhasil dihapus"});
     } catch (error) {
         console.error("Gagal menghapus data:", error.message);
-        res.status(500).send({ error: "Gagal menghapus data" });
+         res.status(404).send({ error: error.message });
     }
 });
 

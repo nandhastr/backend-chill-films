@@ -1,5 +1,5 @@
 import express from "express";
-import { getPays, getPay, createPay, updatePay, deletePay } from "../services/paymentService.js";
+import { getPays, getPay, createPay, updatePay, deletePay } from "../services/pembayaranController.js";
 
 const router = express.Router();
 
@@ -27,8 +27,8 @@ router.get("/pay/:id", async (req, res) => {
 
         res.status(200).send(pay);
     } catch (error) {
-        console.error("Gagal mendapatkan data:", error.message);
-        res.status(500).send({ error: "Gagal mendapatkan data" });
+        console.error("Undefined:", error.message);
+        res.status(500).send({ error: "undefined" });
     }
 });
 
@@ -39,7 +39,7 @@ router.post("/pay", async (req, res) => {
 
         const pay = await createPay({ user_id, order_id, amount, tgl_bayar, pay_method, status, kode_voucher });
 
-        res.status(201).send(pay);
+        res.status(201).send({msg: "Data berhasil ditambahkan"});
     } catch (error) {
         console.error("Gagal membuat data:", error.message);
         res.status(500).send({ error: "Gagal membuat data" });
@@ -58,7 +58,7 @@ router.put("/pay/:id", async (req, res) => {
             return res.status(404).send({ error: "undefined" });
         }
 
-        res.status(200).send(updatedpay);
+        res.status(200).send({msg: "Data berhasil diperbarui"});
     } catch (error) {
         console.error("Gagal memperbarui data:", error.message);
         res.status(500).send({ error: "Gagal memperbarui data" });
@@ -78,7 +78,7 @@ router.delete("/pay/:id", async (req, res) => {
         res.status(200).send(result);
     } catch (error) {
         console.error("Gagal menghapus data:", error.message);
-        res.status(500).send({ error: "Gagal menghapus data" });
+         res.status(404).send({ error: error.message });
     }
 });
 
