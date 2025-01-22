@@ -12,10 +12,18 @@ import sequelize from "../config/database.js";
         user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: "user",
+                key: "id",
+            }
         },
         paket_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: "paket",
+                key: "id",
+            }
         },
         tgl_order: {
             type: DataTypes.DATE,

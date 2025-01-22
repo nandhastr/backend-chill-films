@@ -12,6 +12,10 @@ const Pembayaran = sequelize.define(
         user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: "user",
+                key: "id",
+            }
         },
         amount: {
             type: DataTypes.DECIMAL,

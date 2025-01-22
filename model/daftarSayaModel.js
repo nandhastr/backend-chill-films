@@ -12,14 +12,26 @@ import sequelize from "../config/database.js";
         user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: "user",
+                key: "id",
+            }
         },
         movie_id: {
             type: DataTypes.INTEGER,
             allowNull: true,
+            references: {
+                model: "episodemovie",
+                key: "id",
+            }
         },
         series_id: {
             type: DataTypes.INTEGER,
             allowNull: true,
+            references: {
+                model: "seriesfilm",
+                key: "id",
+            }
         },
         
     },

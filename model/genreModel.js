@@ -4,7 +4,7 @@ import sequelize from "../config/database.js";
  const Genre = sequelize.define(
     "genre",
     {
-        genre_id: {
+        id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,

@@ -1,5 +1,6 @@
 import db from "./config/database.js";
 import express from "express";
+import cors from "cors";
 
 import movieRoutes from "./routes/movieRoutes.js";
 import genreRoutes from "./routes/genreRoutes.js";
@@ -20,6 +21,7 @@ import Order from "./model/orderModel.js";
 import Pembayaran from "./model/pembayaranModel.js";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // route user
@@ -39,26 +41,22 @@ app.use("/", orderRoutes);
 // route payment
 app.use("/", payRoutes);
 
-
-
-
-
-
 try {
     await db.authenticate();
 
     console.log("Database connected");
 
-// sincronisasi tabel model dengan database
-    await User.sync({force:false})
-    await Genre.sync({force:false})
-    await Paket.sync({force:false})
-    await episodeMovie.sync({ force: false })
-    await Series.sync({ force: false })
-    await daftarSaya.sync({ force: false })
-    await Order.sync({ force: false })
-    await Pembayaran.sync({ force: false })
-    
+    // sincronisasi tabel model dengan database
+    await User.sync({ alter: true, force: false });
+    await Paket.sync({ alter: true, force: false });
+    await Genre.sync({ alter: true, force: false });
+    await episodeMovie.sync({ alter: true, force: false });
+    await Series.sync({ alter: true, force: false });
+    await daftarSaya.sync({ alter: true, force: false });
+    await Order.sync({ alter: true, force: false });
+    await Pembayaran.sync({ alter: true, force: false });
+
+    console.log("Model berhasil di sinkronisasi dengan database");
 } catch (error) {
     console.error(error);
 }
@@ -70,7 +68,7 @@ app.use((err, req, res, next) => {
 });
 
 // Menjalankan server
-const port =  8080;
+const port = 8080;
 app.listen(port, () => {
     console.log("Server is running on port " + port);
 });

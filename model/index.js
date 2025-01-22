@@ -1,3 +1,5 @@
+import { DataTypes } from "sequelize";
+import sequelize from "../config/database.js";
 import User from "./userModel";
 import daftarSaya from "./daftarSayaModel";
 import episodeMovie from "./episodeMovieModel";
@@ -7,30 +9,80 @@ import Order from "./orderModel";
 import Paket from "./paketModel";
 import Series from "./seriesFilmModel";
 
-User.hasMany(daftarSaya, { foreignKey: "user_id", as: "daftar_saya" });
-User.hasMany(Order, { foreignKey: "user_id", as: "order" });
-User.hasMany(Pembayaran, { foreignKey: "user_id", as: "pembayaran" });
+// Relasi User
+User.hasMany(daftarSaya, {
+    foreignKey: "user_id",
+    as: "daftarSaya",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
-daftarSaya.belongsTo(User, { foreignKey: "user_id", as: "user" });
-daftarSaya.belongsTo(episodeMovie, { foreignKey: "movie_id", as: "episode_movie" });
-daftarSaya.belongsTo(Series, { foreignKey: "series_id", as: "series" });
+// Relasi EpisodeMovie
+episodeMovie.belongsTo(Genre, {
+    foreignKey: "genre_id",
+    as: "Genre",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
-episodeMovie.belongsTo(Genre, { foreignKey: "genre_id", as: "genre" });
-episodeMovie.belongsTo(Series, { foreignKey: "series_id", as: "series" });
+// Relasi daftarSaya
+daftarSaya.belongsTo(User, {
+    foreignKey: "user_id",
+    as: "User",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
-Genre.hasMany(episodeMovie, { foreignKey: "genre_id", as: "episode_movies" });
-Genre.hasMany(Series, { foreignKey: "genre_id", as: "series" });
+daftarSaya.belongsTo(episodeMovie, {
+    foreignKey: "movie_id",
+    as: "episodeMovie",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
-Pembayaran.belongsTo(Order, { foreignKey: "order_id", as: "order" });
-Pembayaran.belongsTo(User, { foreignKey: "user_id", as: "user" });
+daftarSaya.belongsTo(Series, {
+    foreignKey: "series_id",
+    as: "seriesFilm",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
-Order.belongsTo(User, { foreignKey: "user_id", as: "user" });
-Order.belongsTo(Paket, { foreignKey: "paket_id", as: "paket" });
+// Relasi Order
+Order.belongsTo(User, {
+    foreignKey: "user_id",
+    as: "User",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
-Paket.hasMany(Order, { foreignKey: "paket_id", as: "order" });
+Order.belongsTo(Paket, {
+    foreignKey: "paket_id",
+    as: "Paket",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
-Series.belongsTo(Genre, { foreignKey: "genre_id", as: "genre" });
-Series.hasMany(episodeMovie, { foreignKey: "series_id", as: "episode_movies" });
+// Relasi Pembayaran
+Pembayaran.belongsTo(User, {
+    foreignKey: "user_id",
+    as: "User",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
+Pembayaran.belongsTo(Order, {
+    foreignKey: "order_id",
+    as: "Order",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
+
+// Relasi Paket
+Paket.hasMany(Order, {
+    foreignKey: "paket_id",
+    as: "Order",
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE",
+});
 
 export { User, daftarSaya, episodeMovie, Genre, Pembayaran, Order, Paket, Series };

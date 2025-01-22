@@ -12,6 +12,10 @@ import sequelize from "../config/database.js";
         genre_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: "genre",
+                key: "id",
+            }
             
         },
         judul: {
