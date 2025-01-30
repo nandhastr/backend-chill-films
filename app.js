@@ -1,6 +1,9 @@
 import db from "./config/database.js";
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+
 
 import movieRoutes from "./routes/movieRoutes.js";
 import genreRoutes from "./routes/genreRoutes.js";
@@ -10,6 +13,8 @@ import daftarSayaRoutes from "./routes/daftarSayaRoutes.js";
 import paketRoutes from "./routes/paketRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import payRoutes from "./routes/payRoutes.js";
+import sendEmailRoutes from "./routes/sendEmailRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 
 import User from "./model/userModel.js";
 import Genre from "./model/genreModel.js";
@@ -20,7 +25,10 @@ import daftarSaya from "./model/daftarSayaModel.js";
 import Order from "./model/orderModel.js";
 import Pembayaran from "./model/pembayaranModel.js";
 
+
+dotenv.config();
 const app = express();
+app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 
@@ -40,6 +48,10 @@ app.use("/", paketRoutes);
 app.use("/", orderRoutes);
 // route payment
 app.use("/", payRoutes);
+// route sendMail
+app.use("/", sendEmailRoutes);
+// route upload
+app.use("/", uploadRoutes);
 
 try {
     await db.authenticate();
@@ -47,16 +59,16 @@ try {
     console.log("Database connected");
 
     // sincronisasi tabel model dengan database
-    await User.sync({ alter: true, force: false });
-    await Paket.sync({ alter: true, force: false });
-    await Genre.sync({ alter: true, force: false });
-    await episodeMovie.sync({ alter: true, force: false });
-    await Series.sync({ alter: true, force: false });
-    await daftarSaya.sync({ alter: true, force: false });
-    await Order.sync({ alter: true, force: false });
-    await Pembayaran.sync({ alter: true, force: false });
+    // await User.sync({ force: false });
+    // await Paket.sync({  force: false });
+    // await Genre.sync({  force: false });
+    // await episodeMovie.sync({  force: false });
+    // await Series.sync({  force: false });
+    // await daftarSaya.sync({  force: false });
+    // await Order.sync({  force: false });
+    // await Pembayaran.sync({  force: false });
 
-    console.log("Model berhasil di sinkronisasi dengan database");
+    console.log(" berhasil sinkronisasi dengan database");
 } catch (error) {
     console.error(error);
 }
@@ -68,7 +80,7 @@ app.use((err, req, res, next) => {
 });
 
 // Menjalankan server
-const port = 8080;
+const port = 8080 || process.env.PORT;
 app.listen(port, () => {
     console.log("Server is running on port " + port);
 });

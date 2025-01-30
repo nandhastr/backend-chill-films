@@ -15,7 +15,23 @@ const Pembayaran = sequelize.define(
             references: {
                 model: "user",
                 key: "id",
-            }
+            },
+        },
+        order_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "order",
+                key: "id",
+            },
+        },
+        pay_method: {
+            type: DataTypes.ENUM("transer_bank", "e-wallet", "credit_card"),
+            allowNull: false,
+        },
+        status: {
+            type: DataTypes.ENUM("pending", "complete", "failed", "canceled"),
+            allowNull: false,
         },
         amount: {
             type: DataTypes.DECIMAL,
@@ -31,7 +47,7 @@ const Pembayaran = sequelize.define(
         },
     },
     {
-       freezeTableName: true,
+        freezeTableName: true,
         timestamps: true,
     }
 );

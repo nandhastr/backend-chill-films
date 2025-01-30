@@ -1,84 +1,17 @@
 import express from "express";
-import { getOrders, getOrder, createOrder, updateOrder, deleteOrder } from "../services/orderController.js";
+import { getOrders, getOrder, createOrder, updateOrder, deleteOrder, filterOrder, sortOrder, searchOrder } from "../services/orderController.js";
+import AuthMiddlewareVerifyToken from "../midleware/AuthMiddlewareVerifyToken.js";
 
 const router = express.Router();
 
-// Endpoint untuk mendapatkan semua order
-router.get("/orders", async (req, res) => {
-    try {
-        const order = await getOrders();
-        res.status(200).send(order);
-    } catch (error) {
-        console.error("Gagal mendapatkan data data:", error.message);
-        res.status(500).send({ error: "Gagal mendapatkan data data" });
-    }
-});
+router.get("/orders", AuthMiddlewareVerifyToken, getOrders);
+router.get("/order/:id", AuthMiddlewareVerifyToken,getOrder);
+router.post("/order", AuthMiddlewareVerifyToken, createOrder);
+router.put("/order/:id", AuthMiddlewareVerifyToken, updateOrder);
+router.delete("/order/:id", AuthMiddlewareVerifyToken, deleteOrder);
 
-// Endpoint untuk mendapatkan order berdasarkan ID
-router.get("/order/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const order = await getOrder(id);
-
-        if (!order) {
-            return res.status(404).send({ error: "Undefined" });
-        }
-
-        res.status(200).send(order);
-    } catch (error) {
-       console.error("Undefined:", error.message);
-       res.status(500).send({ error: "Undefined" });
-    }
-});
-
-// Endpoint untuk menambahkan order baru
-router.post("/order", async (req, res) => {
-    try {
-        const { user_id, paket_id, tgl_order, kode_order, status } = req.body;
-
-        const order = await createOrder({ user_id, paket_id, tgl_order, kode_order, status });
-
-        res.status(201).send({msg: "Data berhasil ditambahkan"});
-    } catch (error) {
-        console.error("Gagal membuat data:", error.message);
-        res.status(500).send({ error: "Gagal membuat data" });
-    }
-});
-
-// enpoint untuk update
-router.put("/order/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const { user_id, paket_id, tgl_order, kode_order, status } = req.body;
-
-        const updatedorder = await updateOrder(id, { user_id, paket_id, tgl_order, kode_order, status });
-
-        if (!updatedorder) {
-            return res.status(404).send({ error: "undefined" });
-        }
-
-        res.status(200).send({msg: "Data berhasil diperbarui"});
-    } catch (error) {
-        console.error("Gagal memperbarui data:", error.message);
-        res.status(500).send({ error: "Gagal memperbarui data" });
-    }
-});
-
-// Endpoint untuk menghapus film
-router.delete("/order/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const result = await deleteOrder(id);
-
-        if (!result) {
-            return res.status(404).send({ error: "undefined" });
-        }
-
-        res.status(200).send({msg: "Data berhasil dihapus"});
-    } catch (error) {
-        console.error("Gagal menghapus data:", error.message);
-        res.status(404).send({ error: error.message });
-    }
-});
+router.get("/filterOrder", AuthMiddlewareVerifyToken, filterOrder);
+router.get("/sortOrder", AuthMiddlewareVerifyToken, sortOrder);
+router.get("/searchOrder", AuthMiddlewareVerifyToken, searchOrder);
 
 export default router;
