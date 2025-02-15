@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
+import User from "./userModel.js";
+import Paket from "./paketModel.js";
 
  const Order = sequelize.define(
     "order",
@@ -13,7 +15,7 @@ import sequelize from "../config/database.js";
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "user",
+                model: User,
                 key: "id",
             }
         },
@@ -21,7 +23,7 @@ import sequelize from "../config/database.js";
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "paket",
+                model: Paket,
                 key: "id",
             }
         },
@@ -43,5 +45,6 @@ import sequelize from "../config/database.js";
         timestamps: true,
     }
 );
+
 
 export default Order;

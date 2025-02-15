@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
+import User from "./userModel.js";
+import Order from "./orderModel.js"
 
 const Pembayaran = sequelize.define(
     "pembayaran",
@@ -13,7 +15,7 @@ const Pembayaran = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "user",
+                model: User,
                 key: "id",
             },
         },
@@ -21,7 +23,7 @@ const Pembayaran = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "order",
+                model: Order,
                 key: "id",
             },
         },
@@ -51,5 +53,6 @@ const Pembayaran = sequelize.define(
         timestamps: true,
     }
 );
+
 
 export default Pembayaran;

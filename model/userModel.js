@@ -40,6 +40,9 @@ const User = db.define(
         freezeTableName: true,
         timestamps: true,
     }
+
+    
 );
+
 
 export default User;

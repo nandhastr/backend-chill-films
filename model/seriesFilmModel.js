@@ -1,5 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
+import Genre from "./genreModel.js";
+
 
  const Series = sequelize.define(
     "seriesFilm",
@@ -13,7 +15,7 @@ import sequelize from "../config/database.js";
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "genre",
+                model: Genre,
                 key: "id",
             }
             
@@ -65,5 +67,6 @@ import sequelize from "../config/database.js";
         timestamps: true,
     }
 );
+
 
 export default Series;

@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-
+import { syncDatabase } from "./model/index.js";
 
 import movieRoutes from "./routes/movieRoutes.js";
 import genreRoutes from "./routes/genreRoutes.js";
@@ -15,16 +15,6 @@ import orderRoutes from "./routes/orderRoutes.js";
 import payRoutes from "./routes/payRoutes.js";
 import sendEmailRoutes from "./routes/sendEmailRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
-
-import User from "./model/userModel.js";
-import Genre from "./model/genreModel.js";
-import Paket from "./model/paketModel.js";
-import episodeMovie from "./model/episodeMovieModel.js";
-import Series from "./model/seriesFilmModel.js";
-import daftarSaya from "./model/daftarSayaModel.js";
-import Order from "./model/orderModel.js";
-import Pembayaran from "./model/pembayaranModel.js";
-
 
 dotenv.config();
 const app = express();
@@ -58,17 +48,7 @@ try {
 
     console.log("Database connected");
 
-    // sincronisasi tabel model dengan database
-    // await User.sync({ force: false });
-    // await Paket.sync({  force: false });
-    // await Genre.sync({  force: false });
-    // await episodeMovie.sync({  force: false });
-    // await Series.sync({  force: false });
-    // await daftarSaya.sync({  force: false });
-    // await Order.sync({  force: false });
-    // await Pembayaran.sync({  force: false });
-
-    console.log(" berhasil sinkronisasi dengan database");
+    await syncDatabase();
 } catch (error) {
     console.error(error);
 }
